@@ -103,13 +103,13 @@ def train(Xoh, s0, c0, n_a=32, n_s=64, Tx=30, Ty=10):
 
     model = model_LSTM(Tx, Ty, n_a, n_s, len(human_vocab), len(machine_vocab))
 
-    model.compile(optimizer=Adam(lr=0.005, beta_1=0.9, beta_2=0.999, decay=0.01),
+    model.compile(optimizer=Adam(lr=0.001, beta_1=0.9, beta_2=0.999, decay=0.0),
                         metrics=['accuracy'],
                         loss='categorical_crossentropy')
 
     outputs = list(Yoh.swapaxes(0, 1))
 
-    model.fit([Xoh, s0, c0], outputs, epochs=10, batch_size=100)
+    model.fit([Xoh, s0, c0], outputs, epochs=50, batch_size=200)
 
     return model
 
