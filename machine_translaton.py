@@ -103,13 +103,15 @@ def train(Xoh, s0, c0, n_a=32, n_s=64, Tx=30, Ty=10):
 
     model = model_LSTM(Tx, Ty, n_a, n_s, len(human_vocab), len(machine_vocab))
 
-    model.compile(optimizer=Adam(lr=0.001, beta_1=0.9, beta_2=0.999, decay=0.0),
+    model.compile(optimizer=Adam(lr=0.01, beta_1=0.9, beta_2=0.999, decay=0.0),
                         metrics=['accuracy'],
                         loss='categorical_crossentropy')
 
     outputs = list(Yoh.swapaxes(0, 1))
 
-    model.fit([Xoh, s0, c0], outputs, epochs=50, batch_size=200)
+    # X_train, y_train, X_val, y_val = Xoh[:9000], Xoh[9000:], Yoh[:9000], Yoh[9000:]
+
+    model.fit([Xoh, s0, c0], outputs, epochs=10, batch_size=1000, validation_split=0.1)
 
     return model
 
@@ -132,11 +134,11 @@ def test(model):
 
 if __name__ == '__main__':
 
-    n_sample = 10000
+    n_sample = 40000
     dataset, human_vocab, machine_vocab, inv_machine_vocab = load_dataset(n_sample)
 
     Tx = 30
-    Ty = 10
+    Ty = 4
     X, Y, Xoh, Yoh = preprocess_data(dataset, human_vocab, machine_vocab, Tx, Ty)
 
     n_a = 32
@@ -144,7 +146,7 @@ if __name__ == '__main__':
     s0 = np.zeros((n_sample, n_s))
     c0 = np.zeros((n_sample, n_s))
 
-    model = train(Xoh, s0, c0, n_a=32, n_s=64, Tx=30, Ty=10)
+    model = train(Xoh, s0, c0, n_a=32, n_s=64, Tx=30, Ty=4)
 
     test(model)
 

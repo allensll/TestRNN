@@ -12,30 +12,32 @@ fake.seed(12345)
 random.seed(12345)
 
 # Define format of the data we would like to generate
-FORMATS = ['short',
-           'medium',
-           'long',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'full',
-           'd MMM YYY',
-           'd MMMM YYY',
-           'dd MMM YYY',
-           'd MMM, YYY',
-           'd MMMM, YYY',
-           'dd, MMM YYY',
-           'd MM YY',
-           'd MMMM YYY',
-           'MMMM d YYY',
-           'MMMM d, YYY',
-           'dd.MM.YY']
+# FORMATS = ['short',
+#            'medium',
+#            'long',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'full',
+#            'd MMM YYY',
+#            'd MMMM YYY',
+#            'dd MMM YYY',
+#            'd MMM, YYY',
+#            'd MMMM, YYY',
+#            'dd, MMM YYY',
+#            'd MM YY',
+#            'd MMMM YYY',
+#            'MMMM d YYY',
+#            'MMMM d, YYY',
+#            'dd.MM.YY']
+
+FORMATS = ['long', 'full']
 
 # change this if you want it to work with another language
 LOCALES = ['en_US']
@@ -53,7 +55,7 @@ def load_date():
                                      locale='en_US')  # locale=random.choice(LOCALES))
         human_readable = human_readable.lower()
         human_readable = human_readable.replace(',', '')
-        machine_readable = dt.isoformat()
+        machine_readable = dt.isoformat()[0:4]
 
     except AttributeError as e:
         return None, None, None
@@ -190,8 +192,8 @@ def plot_attention_map(model, input_vocabulary, inv_output_vocabulary, text, n_s
     Plot the attention map.
 
     """
-    attention_map = np.zeros((10, 30))
-    Ty, Tx = attention_map.shape
+    attention_map = np.zeros((Ty, Tx))
+    # Ty, Tx = attention_map.shape
 
     s0 = np.zeros((1, n_s))
     c0 = np.zeros((1, n_s))
